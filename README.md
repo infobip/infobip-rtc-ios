@@ -28,6 +28,11 @@ In order to generate these tokens for your subscribers, you need to call our [`/
 In response, you will receive the token, which enables you to make and receive call via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your iOS application.
 
 
+### Application Permissions
+In order to use InfobipRTC in your application, _Record_ permission is required. Make sure _Record_ permission is requested before making any call.
+Please check [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift) for any help. 
+
+
 ### Making a call
 You can call another WebRTC subscriber, if you know it's identity. It is done via [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
 

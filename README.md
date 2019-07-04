@@ -149,5 +149,5 @@ class MainController: PKPushRegistryDelegate, IncomingCallDelegate {
 Since Push notifications are not available on Simulator devices, in order to test incoming calls you can create active connection when your app launches:
 ```
 let token = obtainToken()
-InfobipRTC.startKeepalivedConnection(token, incomingCallDelegate: self)
+InfobipRTC.startActiveConnection(token, incomingCallDelegate: self)
 ```

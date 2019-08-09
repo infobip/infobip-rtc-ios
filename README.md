@@ -45,7 +45,7 @@ let outgoingCall = InfobipRTC.call(callRequest)
 As you can see, [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method returns instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) as a result. With it, you can track status of your call and invoke call actions. CallDelegate is passed as third param, so you can do something when called subscriber answers the call, rejects it, when call is ended, etc. You set-up call delegate with this code:
 
 ```
-class RTCCallDelegate : OutgoingCallDelegate {
+class RTCCallDelegate : CallDelegate {
     func onEstablished(_ callEstablishedEvent: CallEstablishedEvent) {
         os_log("Call established")
     }
@@ -113,7 +113,7 @@ let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
 voipRegistry.desiredPushTypes = [PKPushType.voIP]
 voipRegistry.delegate = self
 
-class MainController: PKPushRegistryDelegate, IncomingCallDelegate {
+class MainController: PKPushRegistryDelegate, NotificationDelegate {
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
         if type == .voIP {
             do {
@@ -128,7 +128,7 @@ class MainController: PKPushRegistryDelegate, IncomingCallDelegate {
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         if type == .voIP {
             os_log("Received VoIP Push Notification %@", payload)
-            InfobipRTC.handleIncomingCall(payload, incomingCallDelegate: self)
+            InfobipRTC.handleIncomingCall(payload, notificationDelegate: self)
         }
     }
     
@@ -154,5 +154,5 @@ class MainController: PKPushRegistryDelegate, IncomingCallDelegate {
 Since Push notifications are not available on Simulator devices, in order to test incoming calls you can create active connection when your app launches:
 ```
 let token = obtainToken()
-InfobipRTC.startActiveConnection(token, incomingCallDelegate: self)
+InfobipRTC.startActiveConnection(token, notificationDelegate: self)
 ```

@@ -57,6 +57,10 @@ class RTCCallDelegate : CallDelegate {
     func onError(_ callErrorEvent: CallErrorEvent) {
         os_log("Call ended with error")
     }
+
+    func onEarlyMedia(_ callEarlyMediaEvent: CallEarlyMediaEvent) {
+        os_log("Received early media.")
+    }
     
     func onRinging(_ callRingingEvent: CallRingingEvent) {
         os_log("Call is ringing.")

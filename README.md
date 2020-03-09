@@ -159,3 +159,9 @@ Since push notifications are not available on simulator devices, in order to tes
 let token = obtainToken()
 InfobipRTC.startActiveConnection(token, notificationDelegate: self)
 ```
+
+### System Requirements
+
+The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
+
+Supported Swift version is 5.1

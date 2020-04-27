@@ -164,4 +164,4 @@ InfobipRTC.startActiveConnection(token, notificationDelegate: self)
 
 The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
 
-Supported Swift version is 5.1
+Supported Swift version is 5.0 or above.

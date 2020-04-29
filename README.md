@@ -131,7 +131,10 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         if type == .voIP {
             os_log("Received VoIP Push Notification %@", payload)
-            InfobipRTC.handleIncomingCall(payload, notificationDelegate: self)
+            if var incomingCall = InfobipRTC.handleIncomingCall(payload) {
+                incomingCall.delegate = self
+                incomingCall.accept() // or incomingCall.decline()
+            }
         }
     }
     
@@ -142,12 +145,6 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
         } catch {
             os_log("Failed to disable push notifications.")
         }
-    }
-    
-    func onIncomingCall(_ incomingCallEvent: IncomingCallEvent) {
-        let incomingCall = incomingCallEvent.incomingCall
-        incomingCall.delegate = CallDelegate()
-        incomingCall.accept() // or incomingCall.decline()
     }
 }
 ```

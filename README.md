@@ -121,7 +121,11 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
         if type == .voIP {
             do {
                 let token = obtainToken()
-                try InfobipRTC.enablePushNotification(token, pushCredentials: pushCredentials)
+                #if DEBUG
+                    try InfobipRTC.enablePushNotification(token, pushCredentials: pushCredentials, debug: true)
+                #else
+                    try InfobipRTC.enablePushNotification(token, pushCredentials: pushCredentials)
+                #endif
             } catch {
                 os_log("Failed to register for push: %@", error.localizedDescription)
             }
@@ -151,10 +155,10 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
 
 
 #### Receiving call on Simulator
-Since push notifications are not available on simulator devices, in order to test incoming calls you can create an active connection when your app launches:
+Since push notifications are not available on simulator devices, in order to test incoming calls you can create InfobipSimulator instance when creating Push Registry:
 ```
 let token = obtainToken()
-InfobipRTC.startActiveConnection(token, notificationDelegate: self)
+var pushRegistry = InfobipSimulator(token: token)
 ```
 
 ### System Requirements

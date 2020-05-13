@@ -1,10 +1,10 @@
 ### Introduction
-Infobip RTC is an iOS SDK which enables you to take advantage of Infobip Voice platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and actual phone device.
+Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and actual phone device.
 
-Here you will find an overview and quick guide on how to connect to Infobip Voice platform. There is also in-depth reference documentation available. 
+Here you will find an overview and quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Voice enabled on your account and that's it! You are ready to make web and In-App Voice calls.
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make the call.
 
 Please contact your account manager to enable above mentioned features.
 

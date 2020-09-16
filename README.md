@@ -4,10 +4,7 @@ Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platfor
 Here you will find an overview and quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make the call.
-
-Please contact your account manager to enable above mentioned features.
-
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make the call. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
 ### Getting SDK
 There are a few ways that you can get our SDK. We publish it on CocoaPods and Carthage.
 If you want to add it as a CocoaPod dependency, add the following to your Podfile: 

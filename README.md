@@ -1,10 +1,11 @@
 ### Introduction
 Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and actual phone device.
 
-Here you will find an overview and quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
+Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make the call. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make Web and In-app calls. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
+
 ### Getting SDK
 There are a few ways that you can get our SDK. We publish it on CocoaPods and Carthage.
 If you want to add it as a CocoaPod dependency, add the following to your Podfile: 
@@ -19,16 +20,14 @@ import InfobipRTC
 ```
 
 ### Authentication
-Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity for each subscriber. When we have the subscriber's identity, we can generate a token assigned to that specific subscriber. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
+Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity they will use to present themselves. When we have the subscriber's identity, we can generate a token assigned to that specific subscriber. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
-In order to generate the tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method with proper parameters. Also, there you will authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating token occurs after your subscribers are authenticated inside your application.
-In response you receive the token, which enables you to make and receive calls via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your iOS application.
-
+To generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method using proper parameters. There you authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating a token occurs after your subscribers are authenticated inside your application.
+You will receive the token in a response that you will use to make and receive calls via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your iOS application.
 
 ### Application Permissions
 In order to use Infobip RTC in your application, _Record_ permission is required. Make sure _Record_ permission is requested before making any call.
 Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift) for help. 
-
 
 ### Making a call
 You can call another WebRTC subscriber, if you know it's identity. This is done via the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
@@ -159,7 +158,6 @@ var pushRegistry = InfobipSimulator(token: token)
 ```
 
 ### System Requirements
-
 The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
 
 Supported Swift version is 5.0 or above.

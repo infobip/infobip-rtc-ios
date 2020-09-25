@@ -13,6 +13,15 @@ If you want to add it as a CocoaPod dependency, add the following to your Podfil
 pod 'InfobipRTC'
 ```
 
+If you want to use Carthage dependency manager, add these dependencies to your Cartfile: 
+
+```
+github "infobip/infobip-rtc-ios" >= 1.1.6
+github "cesarferreira/SwiftEventBus" >= 5.0.1
+github "daltoniam/Starscream" >= 4.0.4
+binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.31369
+```
+
 And then use it in your project like this:
 
 ```
@@ -26,8 +35,42 @@ To generate these tokens for your subscribers, you need to call our [`/webrtc/
 You will receive the token in a response that you will use to make and receive calls via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your iOS application.
 
 ### Application Permissions
-In order to use Infobip RTC in your application, _Record_ permission is required. Make sure _Record_ permission is requested before making any call.
-Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift) for help. 
+In order to use Infobip RTC in your application, it is required to grant following permissions:
+ 
+ 
+###### _Record_ permission 
+
+Before making any call, make sure to request permission to record.
+
+Example:
+
+```
+AVAudioSession.sharedInstance().requestRecordPermission { granted in
+    if granted {
+        // The user granted access. Present recording interface.
+    }
+}
+```
+
+
+Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift) for additional details. 
+
+###### _Camera_ permission
+
+Make sure _Camera_ permission is requested before making or switching to video call.
+
+Example:
+
+```
+AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in 
+    if granted {
+        // The user granted access. Present camera interface.
+    }
+}
+```
+
+Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avcapturedevice/1624584-requestaccess?language=swift) for additional details. 
+
 
 ### Making a call
 You can call another WebRTC subscriber, if you know it's identity. This is done via the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:

@@ -16,7 +16,7 @@ pod 'InfobipRTC'
 If you want to use Carthage dependency manager, add these dependencies to your Cartfile: 
 
 ```
-github "infobip/infobip-rtc-ios" >= 1.1.6
+github "infobip/infobip-rtc-ios" ~> 1.2.6
 github "cesarferreira/SwiftEventBus" >= 5.0.1
 github "daltoniam/Starscream" >= 4.0.4
 binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.31369

@@ -6,6 +6,11 @@ Here you will find an overview and a quick guide on how to connect to Infobip pl
 ### First-time setup
 In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make Web and In-app calls. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
 
+### System Requirements
+The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
+
+Supported Swift version is 5.1 or above.
+
 ### Getting SDK
 There are a few ways that you can get our SDK. We publish it on CocoaPods and Carthage.
 If you want to add it as a CocoaPod dependency, add the following to your Podfile: 
@@ -199,8 +204,3 @@ Since push notifications are not available on simulator devices, in order to tes
 let token = obtainToken()
 var pushRegistry = InfobipSimulator(token: token)
 ```
-
-### System Requirements
-The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
-
-Supported Swift version is 5.0 or above.

@@ -202,3 +202,70 @@ Since push notifications are not available on simulator devices, in order to tes
 let token = obtainToken()
 var pushRegistry = InfobipSimulator(token: token)
 ```
+### Conference call
+
+You can have a conference call with other WebRTC subscribers. The conference call will start as soon as at least one participant joins.
+
+Joining the room is done via the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method:
+
+```
+let token = obtainToken()
+let conferenceRequest = ConferenceRequest(token, conferenceId: "conference-demo", conferenceDelegate: self)
+let conference = InfobipRTC.joinConference(conferenceRequest)
+```
+
+As you can see, the method returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference) as a result.
+With it, you can track the status of your conference call, do some actions (mute, unmute, leave...) and respond to events.
+You should set up the `ConferenceDelegate`, which is passed as the third param in this method, so that you can perform some actions when a subscriber joined or left the conference, when some error occurs, etc.
+
+Here is an example of how to set up the `ConferenceDelegate`.
+
+```
+class RTCCallDelegate: ConferenceDelegate {
+    func onJoined(joinedEvent: JoinedEvent) {
+        os_log("You have joined the conference.")
+    }
+    
+    func onLeft(leftEvent: LeftEvent) {
+        os_log("You have left the conference.")
+    }
+    
+    func onUserJoined(userJoinedEvent: UserJoinedEvent) {
+        os_log("User joined the conference.")
+    }
+    
+    func onUserLeft(userLeftEvent: UserLeftEvent) {
+        os_log("User left the conference.")
+    }
+    
+    func onUserMuted(userMutedEvent: UserMutedEvent) {
+        os_log("User muted himself.")
+    }
+    
+    func onUserUnmuted(userUnmutedEvent: UserUnmutedEvent) {
+        os_log("User unmuted himself.")
+    }
+    
+    func onError(errorEvent: ErrorEvent) {
+        os_log("Conference error!")
+    }
+}
+```
+
+When `ConferenceDelegate` is set up, and the conference is joined, there are a few things that you can do with the actual conference.
+
+One of them, of course, is to leave it. That can be done via the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#leave) method.
+Other participants will receive the [`UserLeftEvent`] (https://github.com/infobip/infobip-rtc-ios/wiki/UserLeftEvent) event upon leave completion.
+```
+conference.leave();
+```
+
+During the conference call, you can also mute (and unmute) your audio, by calling the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#mute) method in the following way:
+```
+conference.mute(true);
+```
+
+To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#muted) method in the following way:
+```
+boolean audioMuted = conference.muted();
+```

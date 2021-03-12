@@ -221,7 +221,7 @@ You should set up the `ConferenceDelegate`, which is passed as the third param i
 Here is an example of how to set up the `ConferenceDelegate`.
 
 ```
-class RTCCallDelegate: ConferenceDelegate {
+class RTCConferenceDelegate: ConferenceDelegate {
     func onJoined(joinedEvent: JoinedEvent) {
         os_log("You have joined the conference.")
     }

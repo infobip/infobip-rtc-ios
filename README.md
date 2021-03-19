@@ -206,6 +206,8 @@ var pushRegistry = InfobipSimulator(token: token)
 
 You can have a conference call with other WebRTC subscribers. The conference call will start as soon as at least one participant joins.
 
+Conference call is in the beta stage and available for audio only, with a maximum limit of 12 participants.
+
 Joining the room is done via the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method:
 
 ```

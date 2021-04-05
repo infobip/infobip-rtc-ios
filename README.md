@@ -1,5 +1,5 @@
 ### Introduction
-Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between web or app user and actual phone device.
+Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between a web or an app user and actual phone device.
 
 Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
 
@@ -25,7 +25,7 @@ github "infobip/infobip-rtc-ios" ~> 1.3.0
 binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.31369
 ```
 
-And then use it in your project like this:
+After which you would use it in your project like this:
 
 ```
 import InfobipRTC
@@ -110,7 +110,7 @@ class RTCCallDelegate : CallDelegate {
 }
 ```
 
-When `CallDelegate` is set up and the call is established, there are a few things that you can do with the actual call. One of them, of course, is to hang up. That can be done via the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method on the call, and after that, both parties will receive `hangup` event upon hang up completion.
+When `CallDelegate` is set up, and the call is established, there are a few things that you can do with the actual call. One of them, of course, is to hang up. That can be done via the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method on the call, and after that, both parties will receive `hangup` event upon hang up completion.
 
 ```
 outgoingCall.hangup()
@@ -145,14 +145,14 @@ let outgoingCall = InfobipRTC.callPhoneNumber(callRequest, CallPhoneNumberOption
 
 ### Receiving a call
 In order to be able to receive incoming calls, your application needs to support several things:
-* VoIP Background mode enabled - Xcode Project > Capabilites > Background Modes, make sure _Voice over IP_, _Background fetch_ and _Remote notifications_ options are checked.
+* VoIP Background mode enabled - Xcode Project > Capabilities > Background Modes, make sure _Voice over IP_, _Background fetch_ and _Remote notifications_ options are checked.
 
-* Push Notifications enabled - Xcode Project > Capabilites > Push Notifications
+* Push Notifications enabled - Xcode Project > Capabilities > Push Notifications
 
-* Voip Services Certificate - Log in to your Apple developer account, find your app under _Identifiers_ option, enable Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and import the generated certificate in your Keychain and then export it as .p12 file. Exported file will be used later to send push notifications.
+* Voip Services Certificate - Log in to your Apple developer account, find your app under _Identifiers_ option, enable Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and import the generated certificate in your Keychain and then export it as .p12 file. The exported file will be used later to send push notifications.
 
 
-Once the configuration is done, your application must register for push notifications and you have to set up the incoming call delegate using following code:
+Once the configuration is done, your application must register for push notifications, and you have to set up the incoming call delegate using following code:
 ```
 let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
 voipRegistry.desiredPushTypes = [PKPushType.voIP]

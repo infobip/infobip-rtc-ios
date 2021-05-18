@@ -1,24 +1,35 @@
 ### Introduction
-Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform by giving you the ability to enrich your iOS applications with real-time communications in minimum time, while you focus on your application's user experience and business logic. We currently support audio and video calls between two web or app users, and phone calls between a web or an app user and actual phone device.
 
-Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference documentation available. 
+Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform, giving you the ability to enrich your
+applications with real-time communications in minimum time, while you focus on your application's user experience and
+business logic. We currently support audio and video calls between two web or app users, and phone calls between web or
+app user and actual phone device.
+
+Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference
+documentation available [here](https://github.com/infobip/infobip-rtc-ios/wiki).
 
 ### First-time setup
-In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready to make Web and In-app calls. To learn how to enable them see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
+
+In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it!
+You are ready to make Web and In-app calls. To learn how to enable them see
+[the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
 
 ### System Requirements
+
 The Infobip RTC iOS SDK is supported on iOS 10.0 or above.
 
 Supported Swift version is 5.1 or above.
 
-### Getting SDK
-There are a few ways that you can get our SDK. We publish it on CocoaPods and Carthage.
-If you want to add it as a CocoaPod dependency, add the following to your Podfile: 
+### Getting the SDK
+
+There are a few ways that you can get our SDK. We publish it on CocoaPods and Carthage. If you want to add it as a
+CocoaPod dependency, add the following to your Podfile:
+
 ```
 pod 'InfobipRTC'
 ```
 
-If you want to use Carthage dependency manager, add these dependencies to your Cartfile: 
+If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
 
 ```
 github "infobip/infobip-rtc-ios" ~> 1.3.0
@@ -32,16 +43,26 @@ import InfobipRTC
 ```
 
 ### Authentication
-Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency. Your application has your own users, which we will call subscribers throughout this guide. So, in order to use Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to your application are irrelevant to Infobip. We only need the identity they will use to present themselves. When we have the subscriber's identity, we can generate a token assigned to that specific subscriber. With that token, your subscribers can connect to our platform (using Infobip RTC SDK).
 
-To generate these tokens for your subscribers, you need to call our [`/webrtc/1/token`](https://dev.infobip.com/webrtc/generate-token) HTTP API method using proper parameters. There you authenticate yourself against Infobip platform, so we can relate the subscriber's token to you. Typically, generating a token occurs after your subscribers are authenticated inside your application.
-You will receive the token in a response that you will use to make and receive calls via  [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your iOS application.
+Since Infobip RTC is an SDK, it means you develop your own application, and you only use Infobip RTC as a dependency.
+Your application has its own users, which we will refer to as subscribers throughout this guide. So, in order to use
+Infobip RTC, you need to register your subscribers on our platform. The credentials your subscribers use to connect to
+your application are irrelevant to Infobip. We only need the identity they will use to present themselves on our
+platform. When we have the subscriber's identity, we can generate a token assigned to that specific subscriber. Using
+that token, your subscribers are able to connect to our platform (using Infobip RTC SDK).
+
+To generate these tokens for your subscribers, you need to call our
+[`/webrtc/1/token`](https://www.infobip.com/docs/api#channels/webrtc/generate-webrtc-token) HTTP API endpoint using
+proper parameters. After you successfully authenticated your subscribers against Infobip platform, we can relate their
+token to your application. Typically, generating a token occurs after your subscribers are authenticated inside your
+application. You will receive the token in the response that you will use to make and receive calls via  
+[`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your mobile application.
 
 ### Application Permissions
+
 In order to use Infobip RTC in your application, it is required to grant following permissions:
- 
- 
-###### _Record_ permission 
+
+###### _Record_ permission
 
 Before making any call, make sure to request permission to record.
 
@@ -55,8 +76,9 @@ AVAudioSession.sharedInstance().requestRecordPermission { granted in
 }
 ```
 
-
-Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift) for additional details. 
+Please check the
+[official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
+for additional details.
 
 ###### _Camera_ permission
 
@@ -72,11 +94,14 @@ AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
 }
 ```
 
-Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avcapturedevice/1624584-requestaccess?language=swift) for additional details. 
-
+Please check the
+[official documentation](https://developer.apple.com/documentation/avfoundation/avcapturedevice/1624584-requestaccess?language=swift)
+for additional details.
 
 ### Making a call
-You can call another WebRTC subscriber, if you know it's identity. This is done via the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
+
+You can call another WebRTC subscriber, if you know their identity. This is done via
+the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
 
 ```
 let token = obtainToken()
@@ -84,39 +109,57 @@ let callRequest = CallRequest(token, destination: "Alice", callDelegate: self)
 let outgoingCall = InfobipRTC.call(callRequest)
 ```
 
-As you can see, the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method returns an instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) as a result. With it, you can track status of your call and invoke call actions. `CallDelegate` is passed as third param, so you can perform something when called subscriber answers the call, rejects it, when call is ended, etc. You set up `CallDelegate` with the following code:
+As you can see, the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method returns an instance
+of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) as a result. With it, you can track
+the status of your call and respond to events, such as:
+
+* called subscriber answered the call
+* called subscriber rejected the call
+* the call has ended
+
+The `CallDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up using
+the following code:
 
 ```
 class RTCCallDelegate : CallDelegate {
-    func onEstablished(_ callEstablishedEvent: CallEstablishedEvent) {
-        os_log("Call established")
+    func onRinging(_ callRingingEvent: CallRingingEvent) {
+        os_log("Call is ringing.")
     }
-
-    func onHangup(_ callHangupEvent: CallHangupEvent) {
-        os_log("Call ended")
-    }
-
-    func onError(_ callErrorEvent: CallErrorEvent) {
-        os_log("Call ended with error")
-    }
-
+    
     func onEarlyMedia(_ callEarlyMediaEvent: CallEarlyMediaEvent) {
         os_log("Received early media.")
     }
     
-    func onRinging(_ callRingingEvent: CallRingingEvent) {
-        os_log("Call is ringing.")
+    func onEstablished(_ callEstablishedEvent: CallEstablishedEvent) {
+        os_log("Call established.")
+    }
+    
+    func onUpdated(_ callUpdatedEvent: CallUpdatedEvent) {
+        os_log("Call updated.")
+    }
+    
+    func onHangup(_ callHangupEvent: CallHangupEvent) {
+        os_log("Call ended.")
+    }
+    
+    func onError(_ callErrorEvent: CallErrorEvent) {
+        os_log("Call ended with error.")
     }
 }
 ```
 
-When `CallDelegate` is set up, and the call is established, there are a few things that you can do with the actual call. One of them, of course, is to hang up. That can be done via the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method on the call, and after that, both parties will receive `hangup` event upon hang up completion.
+When `CallDelegate` is set up, and the call is established, there are a few things that you can do with the actual call.
+One of them is to hang up the call, which can be done via
+the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method. Upon completion, both parties will
+receive the `hangup` event.
 
 ```
 outgoingCall.hangup()
 ```
 
-You can simulate digit press during the call by sending DTMF codes (Dual-Tone Multi-Frequency). This is achieved via [`sendDTMF`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#sendDTMF) method. Valid DTMF codes are digits `0`-`9`, `*` and `#`.
+You can simulate digit press during the call by sending DTMF codes (Dual-Tone Multi-Frequency). This is achieved via
+the [`sendDTMF`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#sendDTMF) method. Valid DTMF codes are digits `0`
+-`9`, letters `Á` to `D`, `*` and `#`.
 
 ```
 outgoingCall.sendDTMF('*')
@@ -127,16 +170,28 @@ During the call, you can also mute (and unmute) your audio:
 ```
 outgoingCall.mute(true)
 ```
+
 Or you can play media on the speakerphone:
+
 ```
 outgoingCall.speakerphone(true)
 ```
+
 Also, you can check the call status:
+
 ```
 let status = outgoingCall.status
 ```
+
 #### Calling phone number
-It is similar to calling a regular WebRTC user, you just use the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) method instead of [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call). This method accepts an optional second parameter, where you define the `from` parameter. Its value will be displayed calling phone device as Caller ID. The result of [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) is also [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) with which you can do everything like with the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
+
+It is similar to calling a regular WebRTC user, you just use
+the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) method instead
+of [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call). This method accepts an optional second
+parameter, where you define the `from` parameter. Its value will be displayed on the called phone as the Caller ID. The
+result of the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) is also an
+instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) with which you can do
+everything described earlier.
 
 ```
 let callRequest = CallRequest(token, destination: "41793026727", callDelegate: self)
@@ -144,15 +199,23 @@ let outgoingCall = InfobipRTC.callPhoneNumber(callRequest, CallPhoneNumberOption
 ```
 
 ### Receiving a call
+
 In order to be able to receive incoming calls, your application needs to support several things:
-* VoIP Background mode enabled - Xcode Project > Capabilities > Background Modes, make sure _Voice over IP_, _Background fetch_ and _Remote notifications_ options are checked.
 
-* Push Notifications enabled - Xcode Project > Capabilities > Push Notifications
+* VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
+  are checked:
+    + `Voice over IP`
+    + `Background fetch`
+    + `Remote notifications`
+* Push Notifications enabled - `Xcode Project` > `Capabilites` > `Push Notifications`
+* Voip Services Certificate - Log into your Apple developer account, find your app under `Identifiers` option, enable
+  Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and
+  import the generated certificate in your Keychain and then export it as `.p12` file, which will be used later to send
+  push notifications.
 
-* Voip Services Certificate - Log in to your Apple developer account, find your app under _Identifiers_ option, enable Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and import the generated certificate in your Keychain and then export it as .p12 file. The exported file will be used later to send push notifications.
+Once the configuration is done, your application must register for push notifications, and you have to set up the
+incoming call delegate using following code:
 
-
-Once the configuration is done, your application must register for push notifications, and you have to set up the incoming call delegate using following code:
 ```
 let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
 voipRegistry.desiredPushTypes = [PKPushType.voIP]
@@ -195,20 +258,25 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
 }
 ```
 
+#### Receiving a call on Simulator
 
-#### Receiving call on Simulator
-Since push notifications are not available on simulator devices, in order to test incoming calls you can create InfobipSimulator instance when creating Push Registry:
+Since push notifications are not available on simulator devices, in order to test incoming calls you can create
+InfobipSimulator instance when creating Push Registry:
+
 ```
 let token = obtainToken()
 var pushRegistry = InfobipSimulator(token: token)
 ```
+
 ### Conference call
 
-You can have a conference call with other WebRTC subscribers. The conference call will start as soon as at least one participant joins.
+You can have a conference call with other WebRTC subscribers. The conference call will start as soon as at least one
+participant joins.
 
 Conference call is in the beta stage and available for audio only, with a maximum limit of 12 participants.
 
-Joining the room is done via the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method:
+Joining the room is done via
+the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method:
 
 ```
 let token = obtainToken()
@@ -216,11 +284,16 @@ let conferenceRequest = ConferenceRequest(token, conferenceId: "conference-demo"
 let conference = InfobipRTC.joinConference(conferenceRequest)
 ```
 
-As you can see, the method returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference) as a result.
-With it, you can track the status of your conference call, do some actions (mute, unmute, leave...) and respond to events.
-You should set up the `ConferenceDelegate`, which is passed as the third param in this method, so that you can perform some actions when a subscriber joined or left the conference, when some error occurs, etc.
+As you can see, the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method
+returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference) as a result. With it,
+you can track the status of your conference call and respond to events, such as:
 
-Here is an example of how to set up the `ConferenceDelegate`.
+* another user joined the conference
+* user left the conference
+* user muted/unmuted
+
+The `ConferenceDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up
+using the following code:
 
 ```
 class RTCConferenceDelegate: ConferenceDelegate {
@@ -254,20 +327,26 @@ class RTCConferenceDelegate: ConferenceDelegate {
 }
 ```
 
-When `ConferenceDelegate` is set up, and the conference is joined, there are a few things that you can do with the actual conference.
+When `ConferenceDelegate` is set up, and you joined the conference, there are a few things that you can do with the
+actual conference call. One of them is to leave, which can be done via
+the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#leave) method. Upon completion, other remaining
+participants in the conference will receive
+the [`UserLeftEvent`](https://github.com/infobip/infobip-rtc-ios/wiki/UserLeftEvent) event.
 
-One of them, of course, is to leave it. That can be done via the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#leave) method.
-Other participants will receive the [`UserLeftEvent`] (https://github.com/infobip/infobip-rtc-ios/wiki/UserLeftEvent) event upon leave completion.
 ```
 conference.leave();
 ```
 
-During the conference call, you can also mute (and unmute) your audio, by calling the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#mute) method in the following way:
+During the conference call, you can also mute (and unmute) your audio, by calling
+the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#mute) method in the following way:
+
 ```
 conference.mute(true);
 ```
 
-To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#muted) method in the following way:
+To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#muted)
+method in the following way:
+
 ```
 boolean audioMuted = conference.muted();
 ```

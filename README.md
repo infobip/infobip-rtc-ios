@@ -26,20 +26,20 @@ There are few ways that you can get our SDK. We publish it on CocoaPods and Cart
 
 If you want to add it as a CocoaPod dependency, add the following to your Podfile:
 
-```
+```ruby
 pod 'InfobipRTC'
 ```
 
 If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
 
-```
+```ogdl
 github "infobip/infobip-rtc-ios" ~> 1.3.0
 binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.31369
 ```
 
 After which you would use it in your project like this:
 
-```
+```swift
 import InfobipRTC
 ```
 
@@ -63,7 +63,7 @@ application. You will receive the token in the response that you will use to mak
 
 In order to use Infobip RTC in your application, it is required to grant following permissions:
 
-###### _Record_ permission
+#### _Record_ permission
 
 Before making any call, make sure to request permission to record.
 
@@ -81,7 +81,7 @@ Please check
 the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
 for additional details.
 
-###### _Camera_ permission
+#### _Camera_ permission
 
 Make sure _Camera_ permission is requested before making or switching to video call.
 
@@ -114,9 +114,9 @@ As you can see, the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/Inf
 of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) as a result. With it, you can track
 the status of your call and respond to events, such as:
 
-* called subscriber answered the call
-* called subscriber rejected the call
-* the call has ended
+- called subscriber answered the call
+- called subscriber rejected the call
+- the call has ended
 
 The `CallDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up using
 the following code:
@@ -203,13 +203,13 @@ let outgoingCall = InfobipRTC.callPhoneNumber(callRequest, CallPhoneNumberOption
 
 In order to be able to receive incoming calls, your application needs to support several things:
 
-* VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
+- VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
   are checked:
-    + `Voice over IP`
-    + `Background fetch`
-    + `Remote notifications`
-* Push Notifications enabled - `Xcode Project` > `Capabilites` > `Push Notifications`
-* Voip Services Certificate - Log into your Apple developer account, find your app under `Identifiers` option, enable
+  - `Voice over IP`
+  - `Background fetch`
+  - `Remote notifications`
+- Push Notifications enabled - `Xcode Project` > `Capabilites` > `Push Notifications`
+- Voip Services Certificate - Log into your Apple developer account, find your app under `Identifiers` option, enable
   Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and
   import the generated certificate in your Keychain and then export it as `.p12` file, which will be used later to send
   push notifications.
@@ -289,9 +289,9 @@ As you can see, the [`joinConference`](https://github.com/infobip/infobip-rtc-io
 returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference) as a result. With it,
 you can track the status of your conference call and respond to events, such as:
 
-* another user joined the conference
-* user left the conference
-* user muted/unmuted
+- another user joined the conference
+- user left the conference
+- user muted/unmuted
 
 The `ConferenceDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up
 using the following code:

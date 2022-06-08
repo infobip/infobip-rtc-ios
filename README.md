@@ -22,22 +22,33 @@ Supported Swift version is 5.1 or above.
 
 ### Getting the SDK
 
-There are few ways that you can get our SDK. We publish it on CocoaPods and Carthage.
+There are several ways to install our SDK. We publish it on CocoaPods, Swift Package Manager and Carthage.
 
-If you want to add it as a CocoaPod dependency, add the following to your Podfile:
+If you want to add it as a CocoaPods dependency, add the following to your `Podfile`:
 
 ```ruby
 pod 'InfobipRTC'
 ```
 
+To install newly added dependencies, simply run `pod install`.
+
+If you want to install our SDK using Swift Package Manager, add the Github repository 
+`https://github.com/infobip/infobip-rtc-ios/` as a Swift Package. 
+
 If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
 
 ```ogdl
 github "infobip/infobip-rtc-ios" ~> 1.3.0
-binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.31369
+binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.36302
 ```
 
-After which you would use it in your project like this:
+When using it for the first time, run `carthage bootstrap --use-xcframeworks`. Otherwise, run `carthage update --use-xcframeworks` 
+to update dependencies. 
+
+Find InfobipRTC.xcframework in the Carthage/Build folder and drag and drop it in the Frameworks, Libraries, and Embedded Content 
+section of your application target's General settings.
+
+Once the SDK is installed, it is available for use in your project as:
 
 ```swift
 import InfobipRTC

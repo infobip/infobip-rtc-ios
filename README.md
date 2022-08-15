@@ -110,6 +110,11 @@ Please check
 the [official documentation](https://developer.apple.com/documentation/avfoundation/avcapturedevice/1624584-requestaccess?language=swift)
 for additional details.
 
+### Before you make and receive calls
+
+Keep in mind that making and receiving calls on iOS requires you to use [CallKit](https://developer.apple.com/documentation/callkit).
+This enables you to display the system-calling UI and coordinate your calling services with other apps and the system.
+
 ### Making a call
 
 You can call another WebRTC subscriber, if you know their identity. This is done via

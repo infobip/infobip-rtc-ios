@@ -1,9 +1,20 @@
+### WebRTC SDK 1.x deprecation
+
+Following the major release of our new RTC SDK 2.0, we are deprecating the SDK 1.x releases. The SDK 1.x will be out of 
+service on 31/10/2023. All new WebRTC customers must use the SDK 2.x, and customers still using SDK 1.x must migrate 
+to the newer release before the end of service date. To migrate from RTC SDK 1.x to 2.x, consult our
+[migration guides](https://github.com/infobip/infobip-rtc-ios/wiki/Migration-overview).
+
+The deprecated [SDK 1.x Github repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be 
+consulted until the end of service date.
+
 ### Introduction
 
 Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform, giving you the ability to enrich your
 applications with real-time communications in minimum time, while you focus on your application's user experience and
-business logic. We currently support audio and video calls between two web or app users, and phone calls between web or
-app user and actual phone device.
+business logic. We currently support WebRTC calls between two web or app users, phone calls between a web or app user and 
+user behind called phone number, Viber calls, calls to the Infobip Conversations platform, as well as room calls which 
+multiple participants can join.
 
 Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference
 documentation available [here](https://github.com/infobip/infobip-rtc-ios/wiki).
@@ -38,8 +49,8 @@ If you want to install our SDK using Swift Package Manager, add the Github repos
 If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
 
 ```ogdl
-github "infobip/infobip-rtc-ios" ~> 1.3.0
-binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.36302
+github "infobip/infobip-rtc-ios" ~> 2.0.0
+binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.37785
 ```
 
 When using it for the first time, run `carthage bootstrap --use-xcframeworks`. Otherwise, run `carthage update --use-xcframeworks` 
@@ -88,8 +99,7 @@ AVAudioSession.sharedInstance().requestRecordPermission { granted in
 }
 ```
 
-Please check
-the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
+Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
 for additional details.
 
 #### _Camera_ permission
@@ -115,30 +125,30 @@ for additional details.
 Keep in mind that making and receiving calls on iOS requires you to use [CallKit](https://developer.apple.com/documentation/callkit).
 This enables you to display the system-calling UI and coordinate your calling services with other apps and the system.
 
-### Making a call
+### Making a WebRTC call
 
-You can call another WebRTC subscriber, if you know their identity. This is done via
-the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method:
+You can call another subscriber, if you know their identity. This is done via
+the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc) method:
 
 ```swift
 let token = obtainToken()
-let callRequest = CallRequest(token, destination: "Alice", callDelegate: self)
-let outgoingCall = InfobipRTC.call(callRequest)
+let callWebrtcRequest = CallWebrtcRequest(token, destination: "Alice", webrtcCallEventListener: self)
+let webrtcCall = InfobipRTC.callWebrtc(callWebrtcRequest)
 ```
 
-As you can see, the [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call) method returns an instance
-of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) as a result. With it, you can track
+As you can see, the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc) method returns 
+an instance of [`WebrtCall`](https://github.com/infobip/infobip-rtc-ios/wiki/WebrtcCall) as a result. With it, you can track
 the status of your call and respond to events, such as:
 
 - called subscriber answered the call
 - called subscriber rejected the call
 - the call has ended
 
-The `CallDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up using
-the following code:
+The `WebrtcCallEventListener`, passed as the third parameter, is used for receiving events from the SDK, and can be set up 
+using the following code:
 
 ```swift
-class RTCCallDelegate : CallDelegate {
+class RTCWebrtcCallEventListener : WebrtcCallEventListener {
     func onRinging(_ callRingingEvent: CallRingingEvent) {
         os_log("Call is ringing.")
     }
@@ -151,73 +161,130 @@ class RTCCallDelegate : CallDelegate {
         os_log("Call established.")
     }
     
-    func onUpdated(_ callUpdatedEvent: CallUpdatedEvent) {
-        os_log("Call updated.")
+    func onCameraVideoAdded(_ cameraVideoAddedEvent: CameraVideoAddedEvent) {
+        os_log("Camera video added.")
+    }
+    
+    func onCameraVideoUpdated(_ cameraVideoUpdatedEvent: CameraVideoUpdatedEvent) {
+        os_log("Camera video updated.")
+    }
+    
+    func onCameraVideoRemoved() {
+        os_log("Camera video removed.")
+    }
+    
+    func onScreenShareAdded(_ screenShareAddedEvent: ScreenShareAddedEvent) {
+        os_log("Screen share added.")
+    }
+    
+    func onScreenShareRemoved() {
+        os_log("Screen share removed.")
+    }
+    
+    func onRemoteCameraVideoAdded(_ cameraVideoAddedEvent: CameraVideoAddedEvent) {
+        os_log("Remote camera video added.")
+    }
+    
+    func onRemoteCameraVideoRemoved() {
+        os_log("Remote camera video removed.")
+    }
+    
+    func onRemoteScreenShareAdded(_ screenShareAddedEvent: ScreenShareAddedEvent) {
+        os_log("Remote screen share added.")
+    }
+    
+    func onRemoteScreenShareRemoved() {
+        os_log("Remote screen share removed.")
+    }
+    
+    func onRemoteMuted() {
+        os_log("Remote endpoint muted.")
+    }
+    
+    func onRemoteUnmuted() {
+        os_log("Remote endpoint unmuted.")
     }
     
     func onHangup(_ callHangupEvent: CallHangupEvent) {
         os_log("Call ended.")
     }
     
-    func onError(_ callErrorEvent: CallErrorEvent) {
-        os_log("Call ended with error.")
+    func onError(_ errorEvent: ErrorEvent) {
+        os_log("An error has occurred.")
     }
 }
 ```
 
-When `CallDelegate` is set up, and the call is established, there are a few things that you can do with the actual call.
-One of them is to hang up the call, which can be done via
-the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method. Upon completion, both parties will
-receive the `hangup` event.
+When `WebrtcCallEventListener` is set up, and the call is established, there are a few things that you can do with the actual call.
+One of them is to hang up the call, which can be done via the 
+[`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method. Upon completion, both endpoints will
+receive the `CallHangupEvent`.
 
 ```swift
-outgoingCall.hangup()
+webrtcCall.hangup()
 ```
 
 You can simulate digit press during the call by sending DTMF codes (Dual-Tone Multi-Frequency). This is achieved via
-the [`sendDTMF`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#sendDTMF) method. Valid DTMF codes are digits `0`
+the [`sendDTMF`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#send-dtmf) method. Valid DTMF codes are digits `0`
 -`9`, letters `Á` to `D`, symbols `*` and `#`.
 
 ```swift
-outgoingCall.sendDTMF('*')
+webrtcCall.sendDTMF('*')
 ```
 
 During the call, you can also mute (and unmute) your audio:
 
 ```swift
-outgoingCall.mute(true)
+webrtcCall.mute(true)
 ```
 
 Or you can play media on the speakerphone:
 
 ```swift
-outgoingCall.speakerphone(true)
+webrtcCall.speakerphone(true)
 ```
 
 Also, you can check the call status:
 
 ```swift
-let status = outgoingCall.status
+let status = webrtcCall.status
 ```
 
-#### Calling phone number
+#### Making a phone call
 
 It is similar to calling a regular WebRTC user, you just use
-the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) method instead
-of [`call`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call). This method accepts an optional second
+the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) method instead
+of [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc). This method accepts an optional second
 parameter, where you define the `from` parameter. Its value will be displayed on the called phone as the Caller ID. The
-result of the [`callPhoneNumber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#callPhoneNumber) is also an
-instance of [`OutgoingCall`](https://github.com/infobip/infobip-rtc-ios/wiki/OutgoingCall) with which you can do
-everything described earlier.
+result of the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) is an
+instance of [`PhoneCall`](https://github.com/infobip/infobip-rtc-ios/wiki/PhoneCall) on which you can do a several actions, 
+such as muting the call, hanging it up, checking its start time, answer time, duration and more.
 
 ```swift
-let callRequest = CallRequest(token, destination: "41793026727", callDelegate: self)
-let outgoingCall = InfobipRTC.callPhoneNumber(callRequest, CallPhoneNumberOptions(from: "33755531044"))
+let callPhoneRequest = CallPhoneRequest(token, destination: "41793026727", phoneCallEventListener: self)
+let phoneCallOptions = PhoneCallOptions(from: "33755531044")
+let phoneCall = InfobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
 ```
 
-### Receiving a call
+#### Making a Viber call
 
-In order to be able to receive incoming calls, your application needs to support several things:
+Using the [`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) method is similar to 
+previously described methods. In this case, call's destination is Viber application. Unlike in the 
+[`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) method, `from` is required and is 
+passed as part of the [`CallViberRequest`](https://github.com/infobip/infobip-rtc-ios/wiki/CallViberRequest). Additionally, 
+it has to be a Viber Voice number. The result of the 
+[`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) is an instance of 
+[`ViberCall`](https://github.com/infobip/infobip-rtc-ios/wiki/ViberCall) on which you can do a several actions, such as 
+muting the call, hanging it up, checking its start time, answer time, duration and more.
+
+```swift
+let callViberRequest = CallViberRequest(token, destination: "41793026727", from: "41727620397", viberCallEventListener: self)
+let viberCall = InfobipRTC.callViber(callViberRequest)
+```
+
+### Receiving a WebRTC call
+
+In order to be able to receive incoming WebRTC calls, your application needs to support several things:
 
 - VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
   are checked:
@@ -231,14 +298,14 @@ In order to be able to receive incoming calls, your application needs to support
   push notifications.
 
 Once the configuration is done, your application must register for push notifications, and you have to set up the
-incoming call delegate using following code:
+`PKPushRegistryDelegate` and `WebrtcCallEventListener` using following code:
 
 ```swift
 let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
 voipRegistry.desiredPushTypes = [PKPushType.voIP]
 voipRegistry.delegate = self
 
-class MainController: PKPushRegistryDelegate, NotificationDelegate {
+class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
         if type == .voIP {
             do {
@@ -257,9 +324,8 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         if type == .voIP {
             os_log("Received VoIP Push Notification %@", payload)
-            if var incomingCall = InfobipRTC.handleIncomingCall(payload) {
-                incomingCall.delegate = self
-                incomingCall.accept() // or incomingCall.decline()
+            if InfobipRTC.isIncomingBasicCall(payload) {
+                InfobipRTC.handleIncomingCall(payload, self)
             }
         }
     }
@@ -272,10 +338,27 @@ class MainController: PKPushRegistryDelegate, NotificationDelegate {
             os_log("Failed to disable push notifications.")
         }
     }
+    
+    func onIncomingWebrtcCall(incomingWebrtcCallEvent: IncomingWebrtcCallEvent) {
+        let incomingWebrtcCall = incomingWebrtcCallEvent.incomingWebrtcCall
+        os_log("Received an incoming call from %@", incomingWebrtcCall.counterpart().identifier())
+        incomingWebrtcCall.webrtcCallEventListener = WebrtcCallListener(incomingWebrtcCall)
+        incomingWebrtcCall.accept()
+    }
+}
+
+class RTCWebrtcCallListener: WebrtcCallListener {
+    let webrtcCall : WebrtcCall
+    
+    init(_ webrtcCall: WebrtcCall) {
+        self.webrtcCall = webrtcCall
+    }
+    
+    ...
 }
 ```
 
-#### Receiving a call on Simulator
+#### Receiving a WebRTC call on Simulator
 
 Since push notifications are not available on simulator devices, in order to test incoming calls you can create
 InfobipSimulator instance when creating Push Registry:
@@ -285,152 +368,171 @@ let token = obtainToken()
 var pushRegistry = InfobipSimulator(token: token)
 ```
 
-### Conference call
+### Joining a room call
 
-You can have a conference call with other WebRTC subscribers. The conference call will start as soon as at least one
-participant joins.
+You can join a room call with other WebRTC endpoints. The room call will start as soon as at least one participant joins.
 
-Conference call is in the beta stage and available for audio only, with a maximum limit of 12 participants.
+Room can be joined by up to 15 participants, simultaneously.
 
-Joining the room is done via
-the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method:
+Joining the room is done via the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method:
 
 ```swift
 let token = obtainToken()
-let conferenceRequest = ConferenceRequest(token, conferenceId: "conference-demo", conferenceDelegate: self)
-let conference = InfobipRTC.joinConference(conferenceRequest)
+let roomCallRequest = RoomCallRequest(token, roomName: "room-demo", roomCallEventListener: self)
+let room = InfobipRTC.joinRoom(roomCallRequest)
 ```
 
-As you can see, the [`joinConference`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#joinConference) method
-returns an instance of [`Conference`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference) as a result. With it,
-you can track the status of your conference call and respond to events, such as:
+As you can see, the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method
+returns an instance of [`RoomCall`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall) as a result. With it,
+you can track the status of your room call and respond to events, such as:
 
-- another user joined the conference
-- user left the conference
-- user muted/unmuted
+- another participant joined the room
+- participant left the room
+- participant muted/unmuted
 
-The `ConferenceDelegate`, passed as the third parameter, is used for receiving events from the SDK, and can be set up
+The `RoomCallEventListener`, passed as the third parameter, is used for receiving events from the SDK, and can be set up
 using the following code:
 
 ```swift
-class RTCConferenceDelegate: ConferenceDelegate {
-    func onJoined(joinedEvent: JoinedEvent) {
-        os_log("You have joined the conference.")
+class RTCRoomCallEventListener: RoomCallEventListener {    
+    func onError(_ errorEvent: ErrorEvent) {
+        os_log("An error has occurred.")
     }
     
-    func onLeft(leftEvent: LeftEvent) {
-        os_log("You have left the conference.")
+    func onRoomJoined(_ roomJoinedEvent: RoomJoinedEvent) {
+        os_log("You have joined the room.")
     }
     
-    func onUserJoined(userJoinedEvent: UserJoinedEvent) {
-        os_log("User joined the conference.")
+    func onRoomLeft(_ roomLeftEvent: RoomLeftEvent) {
+        os_log("You have left the room.")
     }
     
-    func onUserLeft(userLeftEvent: UserLeftEvent) {
-        os_log("User left the conference.")
+    func onParticipantJoining(_ participantJoiningEvent: ParticipantJoiningEvent) {
+        os_log("Participant joining the room.")
     }
     
-    func onUserMuted(userMutedEvent: UserMutedEvent) {
-        os_log("User muted themself.")
+    func onParticipantJoined(_ participantJoinedEvent: ParticipantJoinedEvent) {
+        os_log("Participant joined the room.")
     }
     
-    func onUserUnmuted(userUnmutedEvent: UserUnmutedEvent) {
-        os_log("User unmuted themself.")
+    func onParticipantLeft(_ participantLeftEvent : ParticipantLeftEvent) {
+        os_log("Participant left the room.")
+    }
+    
+    func onParticipantMuted(_ participantMutedEvent: ParticipantMutedEvent) {
+        os_log("Participant muted themself.")
+    }
+    
+    func onParticipantUnmuted(_ participantUnmutedEvent: ParticipantUnmutedEvent) {
+        os_log("Participant unmuted themself.")
+    }
+    
+    func onParticipantDeaf(_ participantDeafEvent: ParticipantDeafEvent) {
+        os_log("Participant deafened themself.")
+    }
+    
+    func onParticipantUndeaf(_ participantUndeafEvent: ParticipantUndeafEvent) {
+        os_log("Participant undeafened themself.")
+    }
+    
+    func onParticipantStartedTalking(_ participantStartedTalkingEvent: ParticipantStartedTalkingEvent) {
+        os_log("Participant started talking.")
+    }
+    
+    func onParticipantStoppedTalking(_ participantStoppedTalkingEvent: ParticipantStoppedTalkingEvent) {
+        os_log("Participant stopped talking.")
     }
    
-    func onLocalCameraVideoAdded(localCameraVideoAddedEvent: LocalVideoAddedEvent) {
+    func onCameraVideoAdded(_ cameraVideoAddedEvent: CameraVideoAddedEvent) {
        os_log("Camera video added.")
     }
     
-    func onLocalScreenShareAdded(localScreenShareAddedEvent: LocalVideoAddedEvent) {
-       os_log("Screen share started.")
+    func onCameraVideoUpdated(_ cameraVideoUpdatedEvent: CameraVideoUpdatedEvent) {
+       os_log("Camera video updated.")
     }
     
-    func onLocalCameraVideoRemoved() {
+    func onCameraVideoRemoved() {
        os_log("Camera video removed.")
     }
     
-    func onLocalScreenShareRemoved() {
+    func onScreenShareAdded(_ screenShareAddedEvent: ScreenShareAddedEvent) {
+       os_log("Screen share started.")
+    }
+    
+    func onScreenShareRemoved() {
        os_log("Screen share stopped.")
     }
     
-    func onUserCameraVideoAdded(userCameraVideoAddedEvent: UserCameraVideoAddedEvent) {
-       os_log("User added camera video.")
+    func onParticipantCameraVideoAdded(_ participantCameraVideoAddedEvent: ParticipantCameraVideoAddedEvent) {
+       os_log("Participant added camera video.")
     }
     
-    func onUserCameraVideoRemoved(userCameraVideoRemovedEvent: UserCameraVideoRemovedEvent) {
-       os_log("User removed camera video.")
+    func onParticipantCameraVideoRemoved(_ participantCameraVideoRemovedEvent: ParticipantCameraVideoRemovedEvent) {
+       os_log("Participant removed camera video.")
     }
     
-    func onUserScreenShareAdded(userScreenShareAddedEvent: UserScreenShareAddedEvent) {
-       os_log("User started screen share.")
+    func onParticipantScreenShareAdded(_ participantScreenShareAddedEvent: ParticipantScreenShareAddedEvent) {
+       os_log("Participant started screen share.")
     }
     
-    func onUserScreenShareRemoved(userScreenShareRemovedEvent: UserScreenShareRemovedEvent) {
-       os_log("User stopped screen share.")
-    }
-    
-    func onError(errorEvent: ErrorEvent) {
-        os_log("Conference error occured.")
+    func onParticipantScreenShareRemoved(_ participantScreenShareRemovedEvent: ParticipantScreenShareRemovedEvent) {
+       os_log("Participant stopped screen share.")
     }
 }
 ```
 
-When `ConferenceDelegate` is set up, and you joined the conference, there are a few things that you can do with the
-actual conference call.
+When `RoomCallEventListener` is set up, and you joined the room, there are a few things that you can do with the
+actual room call.
 
 One of them is to leave, which can be done via
-the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#leave) method. Upon completion, other remaining
-participants in the conference will receive
-the [`onUserLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserLeft) event, and you will
-receive the [`onLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onLeft) event.
+the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#leave) method. Upon completion,  
+[`onParticipantLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-left) method 
+will be triggered for the remaining participants in the room call, and for you,  
+[`onRoomLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-room-left) method will be triggered.
 
 ```swift
-conference.leave()
+roomCall.leave()
 ```
 
-During the conference call, you can also mute/unmute your audio, by calling
-the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#mute) method. Upon completion, other
-participants in the conference room will receive
-the [`onUserMuted`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserMuted)
-/ [`onUserUnmuted`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserUnmuted)
-event.
+During the room call, you can also mute/unmute your audio, by calling
+the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#mute) method. Upon completion,
+[`onParticipantMuted`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-muted)
+/ [`onParticipantUnmuted`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-unmuted)
+method will be triggered for other participants in the room call.
 
 ```swift
-conference.mute(true)
+roomCall.mute(true)
 ```
 
-To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#muted)
+To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#muted)
 method in the following way:
 
 ```swift
-let audioMuted = conference.muted()
+let audioMuted = roomCall.muted()
 ```
 
 Also, you can enable/disable your camera video, by calling
-the [`cameraVideo`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#cameraVideo) method. Upon completion,
-other participants in the conference room will receive
-the [`onUserCameraVideoAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserCameraVideoAdded)
-/ [`onUserCameraVideoRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserCameraVideoRemoved)
-event, and you will receive
-the [`onLocalCameraVideoAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onLocalCameraVideoAdded)
-/ [`onLocalCameraVideoRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onLocalCameraVideoRemoved)
-event.
+the [`cameraVideo`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#camera-video) method. Upon completion,
+[`onParticipantCameraVideoAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-camera-video-added)
+/ [`onParticipantCameraVideoRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-camera-video-removed)
+method will be triggered for other participants in the room call, while for you,
+[`onCameraVideoAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-camera-video-added)
+/ [`onCameraVideoRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-camera-video-removed)
+method will be triggered.
 
 ```swift
-conference.cameraVideo(cameraVideo: true)
+roomCall.cameraVideo(cameraVideo: true)
 ```
 
 You can start/stop sharing your screen, by calling
-the [`screenShare`](https://github.com/infobip/infobip-rtc-ios/wiki/Conference#screenShare) method. Upon completion,
-other participants in the conference room will receive
-the [`onUserScreenShareAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserScreenShareAdded)
-/ [`onUserScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onUserScreenShareRemoved)
-event, and you will receive
-the [`onLocalScreenShareAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onLocalScreenShareAdded)
-/ [`onLocalScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/ConferenceDelegate#onLocalScreenShareRemoved)
-event.
+the [`screenShare`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#screen-share) method. Upon completion,
+[`onParticipantScreenShareAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-screen-share-added)
+/ [`onParticipantScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-screen-share-removed)
+method will be triggered for other participants in the room call, while for you,
+[`onScreenShareAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-screen-share-added)
+/ [`onScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-screen-share-removed)
+method will be triggered.
 
 ```swift
-conference.screenShare(screenShare: true)
+roomCall.screenShare(screenShare: true)
 ```

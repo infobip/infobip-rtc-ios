@@ -125,6 +125,15 @@ for additional details.
 Keep in mind that making and receiving calls on iOS requires you to use [CallKit](https://developer.apple.com/documentation/callkit).
 This enables you to display the system-calling UI and coordinate your calling services with other apps and the system.
 
+### Getting an InfobipRTC instance
+
+To utilize all the functionalities of InfobipRTC client, you need to obtain an instance of InfobipRTC.
+This is done via calling a globally exposted function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
+
+```java
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+```
+
 ### Making a WebRTC call
 
 You can call another subscriber, if you know their identity. This is done via
@@ -132,8 +141,10 @@ the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#ca
 
 ```swift
 let token = obtainToken()
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+
 let callWebrtcRequest = CallWebrtcRequest(token, destination: "Alice", webrtcCallEventListener: self)
-let webrtcCall = InfobipRTC.callWebrtc(callWebrtcRequest)
+let webrtcCall = infobipRTC.callWebrtc(callWebrtcRequest)
 ```
 
 As you can see, the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc) method returns 
@@ -261,9 +272,10 @@ instance of [`PhoneCall`](https://github.com/infobip/infobip-rtc-ios/wiki/PhoneC
 such as muting the call, hanging it up, checking its start time, answer time, duration and more.
 
 ```swift
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
 let callPhoneRequest = CallPhoneRequest(token, destination: "41793026727", phoneCallEventListener: self)
 let phoneCallOptions = PhoneCallOptions(from: "33755531044")
-let phoneCall = InfobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
+let phoneCall = infobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
 ```
 
 #### Making a Viber call
@@ -278,8 +290,9 @@ it has to be a Viber Voice number. The result of the
 muting the call, hanging it up, checking its start time, answer time, duration and more.
 
 ```swift
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
 let callViberRequest = CallViberRequest(token, destination: "41793026727", from: "41727620397", viberCallEventListener: self)
-let viberCall = InfobipRTC.callViber(callViberRequest)
+let viberCall = infobipRTC.callViber(callViberRequest)
 ```
 
 ### Receiving a WebRTC call
@@ -301,6 +314,7 @@ Once the configuration is done, your application must register for push notifica
 `PKPushRegistryDelegate` and `WebrtcCallEventListener` using following code:
 
 ```swift
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
 let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
 voipRegistry.desiredPushTypes = [PKPushType.voIP]
 voipRegistry.delegate = self
@@ -311,9 +325,9 @@ class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
             do {
                 let token = obtainToken()
                 #if DEBUG
-                    try InfobipRTC.enablePushNotification(token, pushCredentials: pushCredentials, debug: true)
+                    try infobipRTC.enablePushNotification(token, pushCredentials: pushCredentials, debug: true)
                 #else
-                    try InfobipRTC.enablePushNotification(token, pushCredentials: pushCredentials)
+                    try infobipRTC.enablePushNotification(token, pushCredentials: pushCredentials)
                 #endif
             } catch {
                 os_log("Failed to register for push: %@", error.localizedDescription)
@@ -324,8 +338,8 @@ class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         if type == .voIP {
             os_log("Received VoIP Push Notification %@", payload)
-            if InfobipRTC.isIncomingBasicCall(payload) {
-                InfobipRTC.handleIncomingCall(payload, self)
+            if infobipRTC.isIncomingBasicCall(payload) {
+                infobipRTC.handleIncomingCall(payload, self)
             }
         }
     }
@@ -333,7 +347,7 @@ class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
     func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
         do {
             let token = obtainToken()
-            try InfobipRTC.disablePushNotification(token)
+            try infobipRTC.disablePushNotification(token)
         } catch {
             os_log("Failed to disable push notifications.")
         }
@@ -378,8 +392,10 @@ Joining the room is done via the [`joinRoom`](https://github.com/infobip/infobip
 
 ```swift
 let token = obtainToken()
+let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+
 let roomCallRequest = RoomCallRequest(token, roomName: "room-demo", roomCallEventListener: self)
-let room = InfobipRTC.joinRoom(roomCallRequest)
+let room = infobipRTC.joinRoom(roomCallRequest)
 ```
 
 As you can see, the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method

@@ -5,7 +5,7 @@ service on 31/10/2023. All new WebRTC customers must use the SDK 2.x, and custom
 to the newer release before the end of service date. To migrate from RTC SDK 1.x to 2.x, consult our
 [migration guides](https://github.com/infobip/infobip-rtc-ios/wiki/Migration-overview).
 
-The deprecated [SDK 1.x Github repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be 
+The deprecated [SDK 1.x GitHub repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be 
 consulted until the end of service date.
 
 ### Introduction
@@ -43,7 +43,7 @@ pod 'InfobipRTC'
 
 To install newly added dependencies, simply run `pod install`.
 
-If you want to install our SDK using Swift Package Manager, add the Github repository 
+If you want to install our SDK using Swift Package Manager, add the GitHub repository 
 `https://github.com/infobip/infobip-rtc-ios/` as a Swift Package. 
 
 If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
@@ -128,9 +128,9 @@ This enables you to display the system-calling UI and coordinate your calling se
 ### Getting an InfobipRTC instance
 
 To utilize all the functionalities of InfobipRTC client, you need to obtain an instance of InfobipRTC.
-This is done via calling a globally exposted function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
+This is done via calling a globally exposed function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
 
-```java
+```swift
 let infobipRTC: InfobipRTC = getInfobipRTCInstance();
 ```
 

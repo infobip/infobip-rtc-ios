@@ -255,6 +255,9 @@ Or you can play media on the speakerphone:
 webrtcCall.speakerphone(true)
 ```
 
+_To have better control over all connected audio devices, such as bluetooth
+headsets, check out our [`audio device manager`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#audioDeviceManager)_.
+
 Also, you can check the call status:
 
 ```swift

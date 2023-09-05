@@ -75,7 +75,7 @@ subscriber's identity, we can generate a token assigned to that specific subscri
 are able to connect to our platform (using Infobip RTC SDK).
 
 To generate these tokens for your subscribers, you need to call our
-[`/webrtc/1/token`](https://www.infobip.com/docs/api#channels/webrtc/generate-webrtc-token) HTTP API endpoint using
+[`/webrtc/1/token`](https://www.infobip.com/docs/api/channels/webrtc-calls/webrtc/generate-webrtc-token) HTTP API endpoint using
 proper parameters. After you successfully authenticated your subscribers against Infobip platform, we can relate their
 token to your application. Typically, generating a token occurs after your subscribers are authenticated inside your
 application. You will receive the token in the response that you will use to make and receive calls via  
@@ -300,6 +300,9 @@ let viberCall = infobipRTC.callViber(callViberRequest)
 
 ### Receiving a WebRTC call
 
+> Note: In order for push notifications to work, they have to be enabled for your application, as explained in
+> [the documentation](https://www.infobip.com/docs/voice-and-video/webrtc#declare-a-webrtc-application-getstartedwith-rtc-sdk).
+
 In order to be able to receive incoming WebRTC calls, your application needs to support several things:
 
 - VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
@@ -317,27 +320,29 @@ Once the configuration is done, your application must register for push notifica
 `PKPushRegistryDelegate` and `WebrtcCallEventListener` using following code:
 
 ```swift
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
-let voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
-voipRegistry.desiredPushTypes = [PKPushType.voIP]
-voipRegistry.delegate = self
-
 class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
-    func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
-        if type == .voIP {
-            do {
-                let token = obtainToken()
-                #if DEBUG
-                    try infobipRTC.enablePushNotification(token, pushCredentials: pushCredentials, debug: true)
-                #else
-                    try infobipRTC.enablePushNotification(token, pushCredentials: pushCredentials)
-                #endif
-            } catch {
-                os_log("Failed to register for push: %@", error.localizedDescription)
-            }
+    private var voipRegistry: PKPushRegistry
+    
+    init() {
+        voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
+        voipRegistry.desiredPushTypes = [PKPushType.voIP]
+        voipRegistry.delegate = self
+    }
+    
+    var infobipRTC: InfobipRTC {
+        get {
+            return getInfobipRTCInstance()
         }
     }
-        
+    
+    func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
+        if type == .voIP {
+            let token = obtainToken()
+            let debug = isDebug()
+            infobipRTC.enablePushNotification(token, pushCredentials: pushCredentials, debug: debug, pushConfigId: "454d142b-a1ad-239a-d231-227fa335aadc3")
+        }
+    }
+    
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         if type == .voIP {
             os_log("Received VoIP Push Notification %@", payload)
@@ -348,29 +353,32 @@ class MainController: PKPushRegistryDelegate, IncomingCallEventListener {
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-        do {
-            let token = obtainToken()
-            try infobipRTC.disablePushNotification(token)
-        } catch {
-            os_log("Failed to disable push notifications.")
-        }
+        let token = obtainToken()
+        infobipRTC.disablePushNotification(token)
     }
     
-    func onIncomingWebrtcCall(incomingWebrtcCallEvent: IncomingWebrtcCallEvent) {
+    func onIncomingWebrtcCall(_ incomingWebrtcCallEvent: IncomingWebrtcCallEvent) {
         let incomingWebrtcCall = incomingWebrtcCallEvent.incomingWebrtcCall
-        os_log("Received an incoming call from %@", incomingWebrtcCall.counterpart().identifier())
+        // Don't forget to register this call to CallKit
         incomingWebrtcCall.webrtcCallEventListener = WebrtcCallListener(incomingWebrtcCall)
-        incomingWebrtcCall.accept()
+        incomingWebrtcCall.accept() // or incomingWebrtcCall.decline()
+    }
+    
+    func isDebug() -> Bool {
+#if DEBUG
+        return true
+#else
+        return false
+#endif
     }
 }
 
-class RTCWebrtcCallListener: WebrtcCallListener {
+class WebrtcCallListener: WebrtcCallListener {
     let webrtcCall : WebrtcCall
     
     init(_ webrtcCall: WebrtcCall) {
         self.webrtcCall = webrtcCall
     }
-    
     ...
 }
 ```

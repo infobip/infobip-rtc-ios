@@ -1,20 +1,20 @@
 ### WebRTC SDK 1.x deprecation
 
-Following the major release of our new RTC SDK 2.0, we are deprecating the SDK 1.x releases. The SDK 1.x will be out of 
-service on 31/10/2023. All new WebRTC customers must use the SDK 2.x, and customers still using SDK 1.x must migrate 
+Following the major release of our new RTC SDK 2.0, we are deprecating the SDK 1.x releases. The SDK 1.x will be out of
+service on 31/10/2023. All new WebRTC customers must use the SDK 2.x, and customers still using SDK 1.x must migrate
 to the newer release before the end of service date. To migrate from RTC SDK 1.x to 2.x, consult our
 [migration guides](https://github.com/infobip/infobip-rtc-ios/wiki/Migration-overview).
 
-The deprecated [SDK 1.x GitHub repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be 
+The deprecated [SDK 1.x GitHub repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be
 consulted until the end of service date.
 
 ### Introduction
 
 Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform, giving you the ability to enrich your
 applications with real-time communications in minimum time, while you focus on your application's user experience and
-business logic. We currently support WebRTC calls between two web or app users, phone calls between a web or app user and 
-user behind called phone number, Viber calls, calls to the Infobip Conversations platform, as well as room calls which 
-multiple participants can join.
+business logic. We currently support WebRTC calls between two web or app users, phone calls between a web or app user
+and user behind called phone number, Viber calls, calls to the Infobip Conversations platform, as well as room calls
+which multiple participants can join.
 
 Here you will find an overview and a quick guide on how to connect to Infobip platform. There is also in-depth reference
 documentation available [here](https://github.com/infobip/infobip-rtc-ios/wiki).
@@ -35,6 +35,8 @@ Supported Swift version is 5.1 or above.
 
 There are several ways to install our SDK. We publish it on CocoaPods, Swift Package Manager and Carthage.
 
+#### CocoaPods
+
 If you want to add it as a CocoaPods dependency, add the following to your `Podfile`:
 
 ```ruby
@@ -43,21 +45,27 @@ pod 'InfobipRTC'
 
 To install newly added dependencies, simply run `pod install`.
 
-If you want to install our SDK using Swift Package Manager, add the GitHub repository 
-`https://github.com/infobip/infobip-rtc-ios/` as a Swift Package. 
+#### Swift Package Manager
 
-If you want to use Carthage dependency manager, add these dependencies to your Cartfile:
+If you want to install our SDK using Swift Package Manager, add the GitHub repository
+`https://github.com/infobip/infobip-rtc-ios/` as a Swift Package.
+
+#### Carthage
+
+If you want to use Carthage dependency manager, add these dependencies to your `Cartfile`:
 
 ```ogdl
 github "infobip/infobip-rtc-ios" ~> 2.0.0
 binary "https://rtc.cdn.infobip.com/webrtc/ios/releases.json" >= 1.0.37785
 ```
 
-When using it for the first time, run `carthage bootstrap --use-xcframeworks`. Otherwise, run `carthage update --use-xcframeworks` 
-to update dependencies. 
+When using it for the first time, run `carthage bootstrap --use-xcframeworks`. Otherwise,
+run `carthage update --use-xcframeworks` to update dependencies.
 
-Find InfobipRTC.xcframework in the Carthage/Build folder and drag and drop it in the Frameworks, Libraries, and Embedded Content 
-section of your application target's General settings.
+Find `InfobipRTC.xcframework` in the `Carthage/Build` folder and drag and drop it in
+the `Frameworks, Libraries, and Embedded Content` section of your application target's General settings.
+
+#### Using the SDK
 
 Once the SDK is installed, it is available for use in your project as:
 
@@ -75,10 +83,10 @@ subscriber's identity, we can generate a token assigned to that specific subscri
 are able to connect to our platform (using Infobip RTC SDK).
 
 To generate these tokens for your subscribers, you need to call our
-[`/webrtc/1/token`](https://www.infobip.com/docs/api/channels/webrtc-calls/webrtc/generate-webrtc-token) HTTP API endpoint using
-proper parameters. After you successfully authenticated your subscribers against Infobip platform, we can relate their
-token to your application. Typically, generating a token occurs after your subscribers are authenticated inside your
-application. You will receive the token in the response that you will use to make and receive calls via  
+[`/webrtc/1/token`](https://www.infobip.com/docs/api/channels/webrtc-calls/webrtc/generate-webrtc-token) HTTP API
+endpoint using proper parameters. After you successfully authenticated your subscribers against Infobip platform, we can
+relate their token to your application. Typically, generating a token occurs after your subscribers are authenticated
+inside your application. You will receive the token in the response that you will use to make and receive calls via  
 [`InfobipRTC`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC) client in your mobile application.
 
 ### Application Permissions
@@ -99,7 +107,8 @@ AVAudioSession.sharedInstance().requestRecordPermission { granted in
 }
 ```
 
-Please check the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
+Please check
+the [official documentation](https://developer.apple.com/documentation/avfoundation/avaudiosession/1616601-requestrecordpermission?language=swift)
 for additional details.
 
 #### _Camera_ permission
@@ -122,16 +131,18 @@ for additional details.
 
 ### Before you make and receive calls
 
-Keep in mind that making and receiving calls on iOS requires you to use [CallKit](https://developer.apple.com/documentation/callkit).
+Keep in mind that making and receiving calls on iOS requires you to
+use [CallKit](https://developer.apple.com/documentation/callkit).
 This enables you to display the system-calling UI and coordinate your calling services with other apps and the system.
 
 ### Getting an InfobipRTC instance
 
 To utilize all the functionalities of InfobipRTC client, you need to obtain an instance of InfobipRTC.
-This is done via calling a globally exposed function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
+This is done via calling a globally exposed
+function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
 
 ```swift
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+let infobipRTC = getInfobipRTCInstance()
 ```
 
 ### Making a WebRTC call
@@ -141,22 +152,22 @@ the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#ca
 
 ```swift
 let token = obtainToken()
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+let infobipRTC = getInfobipRTCInstance()
 
 let callWebrtcRequest = CallWebrtcRequest(token, destination: "Alice", webrtcCallEventListener: self)
 let webrtcCall = infobipRTC.callWebrtc(callWebrtcRequest)
 ```
 
-As you can see, the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc) method returns 
-an instance of [`WebrtCall`](https://github.com/infobip/infobip-rtc-ios/wiki/WebrtcCall) as a result. With it, you can track
-the status of your call and respond to events, such as:
+As you can see, the [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc) method
+returns an instance of [`WebrtCall`](https://github.com/infobip/infobip-rtc-ios/wiki/WebrtcCall) as a result. With it,
+you can track the status of your call and respond to events, such as:
 
 - called subscriber answered the call
 - called subscriber rejected the call
 - the call has ended
 
-The `WebrtcCallEventListener`, passed as the third parameter, is used for receiving events from the SDK, and can be set up 
-using the following code:
+The `WebrtcCallEventListener`, passed as the third parameter, is used for receiving events from the SDK, and can be set
+up using the following code:
 
 ```swift
 class RTCWebrtcCallEventListener : WebrtcCallEventListener {
@@ -226,9 +237,9 @@ class RTCWebrtcCallEventListener : WebrtcCallEventListener {
 }
 ```
 
-When `WebrtcCallEventListener` is set up, and the call is established, there are a few things that you can do with the actual call.
-One of them is to hang up the call, which can be done via the 
-[`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method. Upon completion, both endpoints will
+When `WebrtcCallEventListener` is set up, and the call is established, there are a few things that you can do with the
+actual call. One of them is to hang up the call, which can be done via
+the [`hangup`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#hangup) method. Upon completion, both endpoints will
 receive the `CallHangupEvent`.
 
 ```swift
@@ -256,7 +267,8 @@ webrtcCall.speakerphone(true)
 ```
 
 _To have better control over all connected audio devices, such as bluetooth
-headsets, check out our [`audio device manager`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#audioDeviceManager)_.
+headsets, check out
+our [`audio device manager`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#audioDeviceManager)_.
 
 Also, you can check the call status:
 
@@ -268,14 +280,15 @@ let status = webrtcCall.status
 
 It is similar to calling a regular WebRTC user, you just use
 the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) method instead
-of [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc). This method accepts an optional second
-parameter, where you define the `from` parameter. Its value will be displayed on the called phone as the Caller ID. The
-result of the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) is an
-instance of [`PhoneCall`](https://github.com/infobip/infobip-rtc-ios/wiki/PhoneCall) on which you can do a several actions, 
-such as muting the call, hanging it up, checking its start time, answer time, duration and more.
+of [`callWebrtc`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-webrtc). This method accepts an
+optional second parameter, where you define the `from` parameter. Its value will be displayed on the called phone as the
+Caller ID. The result of the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) is an
+instance of [`PhoneCall`](https://github.com/infobip/infobip-rtc-ios/wiki/PhoneCall) on which you can do a several
+actions, such as muting the call, hanging it up, checking its start time, answer time, duration and more.
 
 ```swift
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+let token = obtainToken()
+let infobipRTC = getInfobipRTCInstance()
 let callPhoneRequest = CallPhoneRequest(token, destination: "41793026727", phoneCallEventListener: self)
 let phoneCallOptions = PhoneCallOptions(from: "33755531044")
 let phoneCall = infobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
@@ -283,17 +296,18 @@ let phoneCall = infobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
 
 #### Making a Viber call
 
-Using the [`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) method is similar to 
-previously described methods. In this case, call's destination is Viber application. Unlike in the 
-[`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) method, `from` is required and is 
-passed as part of the [`CallViberRequest`](https://github.com/infobip/infobip-rtc-ios/wiki/CallViberRequest). Additionally, 
-it has to be a Viber Voice number. The result of the 
-[`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) is an instance of 
-[`ViberCall`](https://github.com/infobip/infobip-rtc-ios/wiki/ViberCall) on which you can do a several actions, such as 
+Using the [`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) method is similar to
+previously described methods. In this case, call's destination is Viber application. Unlike in
+the [`callPhone`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-phone) method, `from` is required and
+is passed as part of the [`CallViberRequest`](https://github.com/infobip/infobip-rtc-ios/wiki/CallViberRequest).
+Additionally, it has to be a Viber Voice number. The result of the
+[`callViber`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#call-viber) is an instance of
+[`ViberCall`](https://github.com/infobip/infobip-rtc-ios/wiki/ViberCall) on which you can do a several actions, such as
 muting the call, hanging it up, checking its start time, answer time, duration and more.
 
 ```swift
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+let token = obtainToken()
+let infobipRTC = getInfobipRTCInstance()
 let callViberRequest = CallViberRequest(token, destination: "41793026727", from: "41727620397", viberCallEventListener: self)
 let viberCall = infobipRTC.callViber(callViberRequest)
 ```
@@ -305,11 +319,11 @@ let viberCall = infobipRTC.callViber(callViberRequest)
 
 In order to be able to receive incoming WebRTC calls, your application needs to support several things:
 
-- VoIP Background mode enabled - `Xcode Project` > `Capabilites`> `Background Modes` and make sure the following options
-  are checked:
-  - `Voice over IP`
-  - `Background fetch`
-  - `Remote notifications`
+- VoIP Background mode enabled - `Xcode Project` > `Capabilites` > `Background Modes` and make sure the following
+  options are checked:
+    - `Voice over IP`
+    - `Background fetch`
+    - `Remote notifications`
 - Push Notifications enabled - `Xcode Project` > `Capabilites` > `Push Notifications`
 - Voip Services Certificate - Log into your Apple developer account, find your app under `Identifiers` option, enable
   Push Notifications and generate new certificate following the instructions from Apple. Go back to your MacBook and
@@ -395,23 +409,25 @@ var pushRegistry = InfobipSimulator(token: token)
 
 ### Joining a room call
 
-You can join a room call with other WebRTC endpoints. The room call will start as soon as at least one participant joins.
+You can join a room call with other WebRTC endpoints. The room call will start as soon as at least one participant
+joins.
 
 Room can be joined by up to 15 participants, simultaneously.
 
-Joining the room is done via the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method:
+Joining the room is done via the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room)
+method:
 
 ```swift
 let token = obtainToken()
-let infobipRTC: InfobipRTC = getInfobipRTCInstance();
+let infobipRTC = getInfobipRTCInstance()
 
 let roomCallRequest = RoomCallRequest(token, roomName: "room-demo", roomCallEventListener: self)
 let room = infobipRTC.joinRoom(roomCallRequest)
 ```
 
-As you can see, the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method
-returns an instance of [`RoomCall`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall) as a result. With it,
-you can track the status of your room call and respond to events, such as:
+As you can see, the [`joinRoom`](https://github.com/infobip/infobip-rtc-ios/wiki/InfobipRTC#join-room) method returns an
+instance of [`RoomCall`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall) as a result. With it, you can track
+the status of your room call and respond to events, such as:
 
 - another participant joined the room
 - participant left the room
@@ -513,9 +529,10 @@ actual room call.
 
 One of them is to leave, which can be done via
 the [`leave`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#leave) method. Upon completion,  
-[`onParticipantLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-left) method 
+[`onParticipantLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-left) method
 will be triggered for the remaining participants in the room call, and for you,  
-[`onRoomLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-room-left) method will be triggered.
+[`onRoomLeft`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-room-left) method will be
+triggered.
 
 ```swift
 roomCall.leave()

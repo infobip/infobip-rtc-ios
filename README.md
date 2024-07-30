@@ -1,13 +1,3 @@
-### WebRTC SDK 1.x deprecation
-
-Following the major release of our new RTC SDK 2.0, we are deprecating the SDK 1.x releases. The SDK 1.x will be out of
-service on 31/10/2023. All new WebRTC customers must use the SDK 2.x, and customers still using SDK 1.x must migrate
-to the newer release before the end of service date. To migrate from RTC SDK 1.x to 2.x, consult our
-[migration guides](https://github.com/infobip/infobip-rtc-ios/wiki/Migration-overview).
-
-The deprecated [SDK 1.x GitHub repository](https://github.com/infobip/infobip-rtc-ios-1.x-deprecated) can still be
-consulted until the end of service date.
-
 ### Introduction
 
 Infobip RTC is an iOS SDK which enables you to take advantage of Infobip platform, giving you the ability to enrich your

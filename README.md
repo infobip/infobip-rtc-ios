@@ -13,7 +13,7 @@ documentation available [here](https://github.com/infobip/infobip-rtc-ios/wiki).
 
 In order to use Infobip RTC, you need to have Web and In-app Calls enabled on your account and that's it! You are ready
 to make Web and In-app calls. To learn how to enable them
-see [the documentation](https://www.infobip.com/docs/voice-and-video/web-and-in-app-calls#set-up-web-and-in-app-calls).
+see [the documentation](https://www.infobip.com/docs/voice-and-video/webrtc#set-up-web-and-in-app-calls).
 
 ### System Requirements
 

@@ -16,8 +16,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "InfobipRTC",
-            url: "https://rtc.cdn.infobip.com/ios/2/2.5.1/InfobipRTC.zip",
-            checksum: "763007f0ef517ed2c9a7ca32dd8f46eec76e70b29ff4d4da690def12b2ddd8e6"
+            url: "https://rtc.cdn.infobip.com/ios/2/2.5.2/InfobipRTC.zip",
+            checksum: "0a1e28845e4167d3c8d011f46f6a144e99d38bb6f0686fb20b1b651d6a3d5671"
         ),
         .binaryTarget(
             name: "WebRTC",

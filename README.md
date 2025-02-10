@@ -189,7 +189,7 @@ class RTCWebrtcCallEventListener : WebrtcCallEventListener {
         os_log("Screen share added.")
     }
     
-    func onScreenShareRemoved() {
+    func onScreenShareRemoved(_ screenShareRemovedEvent: ScreenShareRemovedEvent) {
         os_log("Screen share removed.")
     }
     
@@ -223,6 +223,22 @@ class RTCWebrtcCallEventListener : WebrtcCallEventListener {
     
     func onError(_ errorEvent: ErrorEvent) {
         os_log("An error has occurred.")
+    }
+    
+    func onReconnecting(_ callReconnectingEvent: CallReconnectingEvent) {
+        os_log("Call reconnecting.")
+    } 
+    
+    func onReconnected(_ callReconnectedEvent: CallReconnectedEvent) {
+        os_log("Call reconnected.")
+    }
+    
+    func onRemoteDisconnected(_ remoteDisconnectedEvent: RemoteDisconnectedEvent) {
+        os_log("Remote endpoint disconnected.")
+    }
+    
+    func onRemoteReconnected(_ remoteReconnectedEvent: RemoteReconnectedEvent) {
+        os_log("Remote endpoint reconnected.")
     }
 }
 ```
@@ -492,7 +508,7 @@ class RTCRoomCallEventListener: RoomCallEventListener {
        os_log("Screen share started.")
     }
     
-    func onScreenShareRemoved() {
+    func onScreenShareRemoved(_ screenShareRemovedEvent: ScreenShareRemovedEvent) {
        os_log("Screen share stopped.")
     }
     
@@ -510,6 +526,26 @@ class RTCRoomCallEventListener: RoomCallEventListener {
     
     func onParticipantScreenShareRemoved(_ participantScreenShareRemovedEvent: ParticipantScreenShareRemovedEvent) {
        os_log("Participant stopped screen share.")
+    }
+    
+    func onParticipantDisconnected(_ participantDisconnectedEvent: ParticipantDisconnectedEvent) {
+       os_log("Participant disconnected.")
+    }
+    
+    func onParticipantReconnected(_ participantReconnectedEvent: ParticipantReconnectedEvent) {
+       os_log("Participant reconnected.")
+    }
+    
+    func onReconnecting(_ callReconnectingEvent: CallReconnectingEvent) {
+        os_log("Room call reconnecting.")
+    } 
+    
+    func onReconnected(_ callReconnectedEvent: CallReconnectedEvent) {
+        os_log("Room call reconnected.")
+    }
+    
+    func onRoomRecordingStarted(_ roomRecordingStartedEvent: RoomRecordingStartedEvent) {
+       os_log("Room recording started.")
     }
 }
 ```

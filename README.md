@@ -181,7 +181,7 @@ class RTCWebrtcCallEventListener : WebrtcCallEventListener {
         os_log("Camera video updated.")
     }
     
-    func onCameraVideoRemoved() {
+    func onCameraVideoRemoved(_ cameraVideoRemovedEvent: CameraVideoRemovedEvent) {
         os_log("Camera video removed.")
     }
     
@@ -217,28 +217,32 @@ class RTCWebrtcCallEventListener : WebrtcCallEventListener {
         os_log("Remote endpoint unmuted.")
     }
     
-    func onHangup(_ callHangupEvent: CallHangupEvent) {
-        os_log("Call ended.")
-    }
-    
-    func onError(_ errorEvent: ErrorEvent) {
-        os_log("An error has occurred.")
-    }
-    
-    func onReconnecting(_ callReconnectingEvent: CallReconnectingEvent) {
-        os_log("Call reconnecting.")
-    } 
-    
-    func onReconnected(_ callReconnectedEvent: CallReconnectedEvent) {
-        os_log("Call reconnected.")
-    }
-    
     func onRemoteDisconnected(_ remoteDisconnectedEvent: RemoteDisconnectedEvent) {
         os_log("Remote endpoint disconnected.")
     }
     
     func onRemoteReconnected(_ remoteReconnectedEvent: RemoteReconnectedEvent) {
         os_log("Remote endpoint reconnected.")
+    }
+    
+    func onReconnecting(_ callReconnectingEvent: CallReconnectingEvent) {
+        os_log("Reconnecting...")
+    }
+    
+    func onReconnected(_ callReconnectedEvent: CallReconnectedEvent) {
+        os_log("Reconnected.")
+    }
+    
+    func onCallRecordingStarted(_ callRecordingStartedEvent: CallRecordingStartedEvent) {
+        os_log("Call recording started.")
+    }
+    
+    func onHangup(_ callHangupEvent: CallHangupEvent) {
+        os_log("Call ended.")
+    }
+    
+    func onError(_ errorEvent: ErrorEvent) {
+        os_log("An error has occurred.")
     }
 }
 ```
@@ -257,13 +261,21 @@ the [`sendDTMF`](https://github.com/infobip/infobip-rtc-ios/wiki/Call#send-dtmf)
 -`9`, letters `Á` to `D`, symbols `*` and `#`.
 
 ```swift
-webrtcCall.sendDTMF('*')
+do {
+    try webrtcCall.sendDTMF('*')
+} catch {
+    print("Error: \(error)")
+}
 ```
 
 During the call, you can also mute (and unmute) your audio:
 
 ```swift
-webrtcCall.mute(true)
+do {
+    try webrtcCall.mute(true)
+} catch {
+    print("Error: \(error)")
+}
 ```
 
 Or you can play media on the speakerphone:
@@ -295,6 +307,7 @@ actions, such as muting the call, hanging it up, checking its start time, answer
 ```swift
 let token = obtainToken()
 let infobipRTC = getInfobipRTCInstance()
+
 let callPhoneRequest = CallPhoneRequest(token, destination: "41793026727", phoneCallEventListener: self)
 let phoneCallOptions = PhoneCallOptions(from: "33755531044")
 let phoneCall = infobipRTC.callPhone(callPhoneRequest, phoneCallOptions)
@@ -314,6 +327,7 @@ muting the call, hanging it up, checking its start time, answer time, duration a
 ```swift
 let token = obtainToken()
 let infobipRTC = getInfobipRTCInstance()
+
 let callViberRequest = CallViberRequest(token, destination: "41793026727", from: "41727620397", viberCallEventListener: self)
 let viberCall = infobipRTC.callViber(callViberRequest)
 ```
@@ -443,11 +457,7 @@ The `RoomCallEventListener`, passed as the third parameter, is used for receivin
 using the following code:
 
 ```swift
-class RTCRoomCallEventListener: RoomCallEventListener {    
-    func onError(_ errorEvent: ErrorEvent) {
-        os_log("An error has occurred.")
-    }
-    
+class RTCRoomCallEventListener: RoomCallEventListener {
     func onRoomJoined(_ roomJoinedEvent: RoomJoinedEvent) {
         os_log("You have joined the room.")
     }
@@ -468,6 +478,42 @@ class RTCRoomCallEventListener: RoomCallEventListener {
         os_log("Participant left the room.")
     }
     
+    func onCameraVideoAdded(_ cameraVideoAddedEvent: CameraVideoAddedEvent) {
+        os_log("Camera video added.")
+    }
+    
+    func onCameraVideoUpdated(_ cameraVideoUpdatedEvent: CameraVideoUpdatedEvent) {
+        os_log("Camera video updated.")
+    }
+    
+    func onCameraVideoRemoved(_ cameraVideoRemovedEvent: CameraVideoRemovedEvent) {
+        os_log("Camera video removed.")
+    }
+    
+    func onScreenShareAdded(_ screenShareAddedEvent: ScreenShareAddedEvent) {
+        os_log("Screen share started.")
+    }
+    
+    func onScreenShareRemoved(_ screenShareRemovedEvent: ScreenShareRemovedEvent) {
+        os_log("Screen share stopped.")
+    }
+    
+    func onParticipantCameraVideoAdded(_ participantCameraVideoAddedEvent: ParticipantCameraVideoAddedEvent) {
+        os_log("Participant added camera video.")
+    }
+    
+    func onParticipantCameraVideoRemoved(_ participantCameraVideoRemovedEvent: ParticipantCameraVideoRemovedEvent) {
+        os_log("Participant removed camera video.")
+    }
+    
+    func onParticipantScreenShareAdded(_ participantScreenShareAddedEvent: ParticipantScreenShareAddedEvent) {
+        os_log("Participant started screen share.")
+    }
+    
+    func onParticipantScreenShareRemoved(_ participantScreenShareRemovedEvent: ParticipantScreenShareRemovedEvent) {
+        os_log("Participant stopped screen share.")
+    }
+    
     func onParticipantMuted(_ participantMutedEvent: ParticipantMutedEvent) {
         os_log("Participant muted themself.")
     }
@@ -484,6 +530,14 @@ class RTCRoomCallEventListener: RoomCallEventListener {
         os_log("Participant undeafened themself.")
     }
     
+    func onParticipantBlinded(_ participantBlindedEvent: ParticipantBlindedEvent) {
+        os_log("Participant blinded themself.")
+    }
+    
+    func onParticipantUnblinded(_ participantUnblindedEvent: ParticipantUnblindedEvent) {
+        os_log("Participant unblinded themself.")
+    }
+    
     func onParticipantStartedTalking(_ participantStartedTalkingEvent: ParticipantStartedTalkingEvent) {
         os_log("Participant started talking.")
     }
@@ -491,61 +545,29 @@ class RTCRoomCallEventListener: RoomCallEventListener {
     func onParticipantStoppedTalking(_ participantStoppedTalkingEvent: ParticipantStoppedTalkingEvent) {
         os_log("Participant stopped talking.")
     }
-   
-    func onCameraVideoAdded(_ cameraVideoAddedEvent: CameraVideoAddedEvent) {
-       os_log("Camera video added.")
-    }
-    
-    func onCameraVideoUpdated(_ cameraVideoUpdatedEvent: CameraVideoUpdatedEvent) {
-       os_log("Camera video updated.")
-    }
-    
-    func onCameraVideoRemoved() {
-       os_log("Camera video removed.")
-    }
-    
-    func onScreenShareAdded(_ screenShareAddedEvent: ScreenShareAddedEvent) {
-       os_log("Screen share started.")
-    }
-    
-    func onScreenShareRemoved(_ screenShareRemovedEvent: ScreenShareRemovedEvent) {
-       os_log("Screen share stopped.")
-    }
-    
-    func onParticipantCameraVideoAdded(_ participantCameraVideoAddedEvent: ParticipantCameraVideoAddedEvent) {
-       os_log("Participant added camera video.")
-    }
-    
-    func onParticipantCameraVideoRemoved(_ participantCameraVideoRemovedEvent: ParticipantCameraVideoRemovedEvent) {
-       os_log("Participant removed camera video.")
-    }
-    
-    func onParticipantScreenShareAdded(_ participantScreenShareAddedEvent: ParticipantScreenShareAddedEvent) {
-       os_log("Participant started screen share.")
-    }
-    
-    func onParticipantScreenShareRemoved(_ participantScreenShareRemovedEvent: ParticipantScreenShareRemovedEvent) {
-       os_log("Participant stopped screen share.")
-    }
     
     func onParticipantDisconnected(_ participantDisconnectedEvent: ParticipantDisconnectedEvent) {
-       os_log("Participant disconnected.")
+        os_log("Participant disconnected.")
     }
     
     func onParticipantReconnected(_ participantReconnectedEvent: ParticipantReconnectedEvent) {
-       os_log("Participant reconnected.")
+        os_log("Participant reconnected.")
     }
     
     func onReconnecting(_ callReconnectingEvent: CallReconnectingEvent) {
-        os_log("Room call reconnecting.")
-    } 
+        os_log("Reconnecting...")
+    }
     
     func onReconnected(_ callReconnectedEvent: CallReconnectedEvent) {
-        os_log("Room call reconnected.")
+        os_log("Reconneted.")
     }
     
     func onRoomRecordingStarted(_ roomRecordingStartedEvent: RoomRecordingStartedEvent) {
-       os_log("Room recording started.")
+        os_log("Room recording started.")
+    }
+    
+    func onError(_ errorEvent: ErrorEvent) {
+        os_log("An error has occurred.")
     }
 }
 ```
@@ -571,7 +593,11 @@ the [`mute`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#mute) meth
 method will be triggered for other participants in the room call.
 
 ```swift
-roomCall.mute(true)
+do {
+    try roomCall.mute(true)
+} catch {
+    print("Error: \(error)")
+}
 ```
 
 To check if the audio is muted, call the [`muted`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#muted)
@@ -591,7 +617,11 @@ method will be triggered for other participants in the room call, while for you,
 method will be triggered.
 
 ```swift
-roomCall.cameraVideo(cameraVideo: true)
+do {
+    try roomCall.cameraVideo(cameraVideo: true)
+} catch {
+    print("Error: \(error)")
+}
 ```
 
 You can start/stop sharing your screen, by calling
@@ -604,5 +634,9 @@ method will be triggered for other participants in the room call, while for you,
 method will be triggered.
 
 ```swift
-roomCall.screenShare(screenShare: true)
+do {
+    try roomCall.screenShare(screenShare: true)
+} catch {
+    print("Error: \(error)")
+}
 ```

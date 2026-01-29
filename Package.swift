@@ -3,10 +3,15 @@ import PackageDescription
 
 let package = Package(
     name: "InfobipRTC",
+    platforms: [.iOS(.v12)],
     products: [
         .library(
             name: "InfobipRTC",
             targets: ["InfobipRTC"]
+        ),
+        .library(
+            name: "InfobipRTCBroadcastExtension",
+            targets: ["InfobipRTCBroadcastExtension"]
         ),
         .library(
             name: "IBWebRTC",
@@ -16,8 +21,13 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "InfobipRTC",
-            url: "https://rtc.cdn.infobip.com/ios/2/2.6.7/InfobipRTC.zip",
-            checksum: "91b164323d5f11867de1803ff6a90a6e5c83fa575a21b84542acf734e3cba7d9"
+            url: "https://rtc.cdn.infobip.com/ios/2/2.6.8/InfobipRTC.zip",
+            checksum: "d7f2227206b4c458ec59d93b3cf474f1b08f87bd581fb013131c7616b30ff40a"
+        ),
+        .binaryTarget(
+            name: "InfobipRTCBroadcastExtension",
+            url: "https://rtc.cdn.infobip.com/ios/2/2.6.8/InfobipRTCBroadcastExtension.zip",
+            checksum: "31266710801d6ede827c50fbd68ea84f0219072ab0e4d4b137015b8d4c4a8ea3"
         ),
         .binaryTarget(
             name: "IBWebRTC",

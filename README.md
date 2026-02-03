@@ -125,11 +125,11 @@ Keep in mind that making and receiving calls on iOS requires you to
 use [CallKit](https://developer.apple.com/documentation/callkit).
 This enables you to display the system-calling UI and coordinate your calling services with other apps and the system.
 
-### Getting an InfobipRTC instance
+### Getting an InfobipRTC client
 
 To utilize all the functionalities of InfobipRTC client, you need to obtain an instance of InfobipRTC.
 This is done via calling a globally exposed
-function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Instance):
+function [`getInfobipRTCInstance`](https://github.com/infobip/infobip-rtc-ios/wiki/Getting-InfobipRTC-Client):
 
 ```swift
 let infobipRTC = getInfobipRTCInstance()
@@ -624,8 +624,9 @@ do {
 }
 ```
 
-You can start/stop sharing your screen, by calling
-the [`screenShare`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#screen-share) method. Upon completion,
+You can start/stop sharing your screen using
+the [`startScreenShare`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#start-screen-share) and
+[`stopScreenShare`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCall#stop-screen-share) methods. Upon completion,
 [`onParticipantScreenShareAdded`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-screen-share-added)
 / [`onParticipantScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-participant-screen-share-removed)
 method will be triggered for other participants in the room call, while for you,
@@ -633,9 +634,59 @@ method will be triggered for other participants in the room call, while for you,
 / [`onScreenShareRemoved`](https://github.com/infobip/infobip-rtc-ios/wiki/RoomCallEventListener#on-screen-share-removed)
 method will be triggered.
 
+#### In-App Screen Share
+
+In-app screen share captures only your application's content. This is the default mode and requires no additional setup:
+
 ```swift
 do {
-    try roomCall.screenShare(screenShare: true)
+    try roomCall.startScreenShare()
+} catch {
+    print("Error: \(error)")
+}
+```
+
+To stop screen sharing:
+
+```swift
+do {
+    try roomCall.stopScreenShare()
+} catch {
+    print("Error: \(error)")
+}
+```
+
+#### Broadcast Screen Share
+
+Broadcast screen share captures the entire device screen, including other apps and system UI. This mode uses Apple's
+Broadcast Upload Extension and requires additional setup.
+
+> **Note**
+>
+> For broadcast screen sharing, you must:
+> 1. Create a Broadcast Upload Extension target that subclasses `InfobipRTCSampleHandler`
+> 2. Configure an App Group in both your main app and broadcast extension
+> 3. Add `RPSystemBroadcastPickerView` to your UI for the user to start the broadcast
+>
+> See the [Broadcast Screen Share Setup Guide](https://github.com/infobip/infobip-rtc-ios/wiki/Broadcast-Screen-Share)
+> for detailed instructions.
+
+Before the user taps the broadcast picker, call `startScreenShare` with broadcast options:
+
+```swift
+do {
+    let options = ScreenShareOptions(mode: .broadcast, appGroup: "group.com.yourcompany.yourapp")
+    try roomCall.startScreenShare(options)
+} catch {
+    print("Error: \(error)")
+}
+```
+
+To stop broadcast screen share:
+
+```swift
+do {
+    try roomCall.stopScreenShare()
 } catch {
     print("Error: \(error)")
 }

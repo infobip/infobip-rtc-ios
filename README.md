@@ -656,7 +656,7 @@ do {
 }
 ```
 
-#### Broadcast Screen Share
+#### Broadcast Screen Share (Full Screen Share)
 
 Broadcast screen share captures the entire device screen, including other apps and system UI. This mode uses Apple's
 Broadcast Upload Extension and requires additional setup.
@@ -668,7 +668,7 @@ Broadcast Upload Extension and requires additional setup.
 > 2. Configure an App Group in both your main app and broadcast extension
 > 3. Add `RPSystemBroadcastPickerView` to your UI for the user to start the broadcast
 >
-> See the [Broadcast Screen Share Setup Guide](https://github.com/infobip/infobip-rtc-ios/wiki/Broadcast-Screen-Share)
+> See the [Broadcast Screen Share Setup Guide](https://github.com/infobip/infobip-rtc-ios/wiki/Broadcast-screen-share-(iOS-full-screen-share))
 > for detailed instructions.
 
 Before the user taps the broadcast picker, call `startScreenShare` with broadcast options:

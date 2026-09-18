@@ -22,12 +22,12 @@ let package = Package(
         .binaryTarget(
             name: "InfobipRTC",
             url: "https://rtc.cdn.infobip.com/ios/2/2.6.12/InfobipRTC.zip",
-            checksum: "8b89a6473492c51f2a977939dbc018cf3fb819ff068f013c85b637210c103b18"
+            checksum: "a76ccf58caabca1533a28cf10ac4b38496ec213023a4e90ee1334ea7fc81c4ff"
         ),
         .binaryTarget(
             name: "InfobipRTCBroadcastExtension",
             url: "https://rtc.cdn.infobip.com/ios/2/2.6.12/InfobipRTCBroadcastExtension.zip",
-            checksum: "b231e1706377c8c08d888fdc5dd657a98597c282b6b66550a4cb06426a0b7352"
+            checksum: "71b0701ab2686f8ae10f0bee092e03ce4b3d12f7bd7c1bad0e1c5a9dd0f56a40"
         ),
         .binaryTarget(
             name: "IBWebRTC",
